@@ -52,9 +52,9 @@ const OnboardingPage = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Complete Your Profile</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* PROFILE PIC CONTAINER */}
+            {/* Profile Picture */}
             <div className="flex flex-col items-center justify-center space-y-4">
-              {/* IMAGE PREVIEW */}
+              {/* Image Preview */}
               <div className="size-32  bg-base-300 overflow-hidden">
                 {formState.profilePic ? (
                   <img
@@ -78,7 +78,7 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            {/* FULL NAME */}
+            {/* Full Name */}
             <div className="form-control">
               <label className="label" htmlFor="fullName">
                 <span className="label-text">Full Name</span>
@@ -94,7 +94,7 @@ const OnboardingPage = () => {
               />
             </div>
 
-            {/* BIO */}
+            {/* Bio */}
             <div className="form-control">
               <label className="label" htmlFor="bio">
                 <span className="label-text">Bio</span>
@@ -110,9 +110,9 @@ const OnboardingPage = () => {
               />
             </div>
 
-            {/* LANGUAGES */}
+            {/* Languages */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* NATIVE LANGUAGE */}
+              {/* Native Language */}
               <div className="form-control">
                 <label className="label" htmlFor="nativeLanguage">
                   <span className="label-text">Native Language</span>
@@ -133,7 +133,7 @@ const OnboardingPage = () => {
                 </select>
               </div>
 
-              {/* LEARNING LANGUAGE */}
+              {/* Learning Language */}
               <div className="form-control">
                 <label className="label" htmlFor="learningLanguage">
                   <span className="label-text">Learning Language</span>
@@ -155,7 +155,7 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            {/* LOCATION */}
+            {/* Location */}
             <div className="form-control">
               <label className="label" htmlFor="location">
                 <MapPinIcon className="transform -translate-y-1/2 left-3 size-4 text-base-content opacity-70" />
@@ -174,7 +174,7 @@ const OnboardingPage = () => {
               </div>
             </div>
 
-            {/* SUBMIT BUTTON */}
+            {/* Submit Button */}
 
             <button className="btn btn-primary w-full" disabled={isPending} type="submit">
               {!isPending ? (

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Dog } from "lucide-react";
 import { Link } from "react-router"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signup, getErrorMessage } from "../lib/api";
+import { getErrorMessage } from "../lib/api";
+import useSignup from "../hooks/useSignup";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -11,12 +11,7 @@ const SignUpPage = () => {
     password: ""
   })
 
-  const queryClient = useQueryClient();
-
-  const { mutate:signupMutation, isPending, error } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"]})
-  });
+  const { isPending, error, signupMutation } = useSignup();
 
   const handleSignup = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -56,11 +51,12 @@ const SignUpPage = () => {
                 <div className="space-y-3">
                   { /* Full Name input */}
                   <div className="form-control w-full">
-                    <label className="label">
+                    <label className="label" htmlFor="fullName">
                       <span className="label-text">Full Name</span>
                     </label>
 
                     <input 
+                      id="fullName"
                       type="text"
                       placeholder="Enter your Full Name"
                       className="input input-bordered w-full"
@@ -71,12 +67,14 @@ const SignUpPage = () => {
 
                   { /* Email Input */}
                   <div className="form-control w-full">
-                    <label className="label">
+                    <label className="label" htmlFor="email">
                       <span className="label-text">Email</span>
                     </label>
 
                     <input 
+                      id="email"
                       type="email"
+                      autoComplete="email"
                       placeholder="Enter your Email"
                       className="input input-bordered w-full"
                       value={signupData.email}
@@ -86,11 +84,12 @@ const SignUpPage = () => {
 
                    { /* Password Input */}
                   <div className="form-control w-full">
-                    <label className="label">
+                    <label className="label" htmlFor="password">
                       <span className="label-text">Password</span>
                     </label>
 
                     <input 
+                      id="password"
                       type="password"
                       placeholder="Enter your Password"
                       className="input input-bordered w-full"
@@ -105,7 +104,7 @@ const SignUpPage = () => {
                   { /* TOS Checkbox */}
                   <div className="form-control">
                     <label className="label cursor-pointer justify-start gap-2">
-                      <input type="checkbox" className="checkbox checkbox-sm" required />
+                      <input id="tos" type="checkbox" className="checkbox checkbox-sm" required />
                       <span className="text-xs leading-tight">
                         I agree to the{" "}
                         <span className="text-primary hover:underline">terms of service</span> and {" "}
@@ -140,7 +139,6 @@ const SignUpPage = () => {
         </div>
 
         { /* Signup Form - Right Side */ }
-        {/* SIGNUP FORM - RIGHT SIDE */}
         <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
           <div className="max-w-md p-8">
             {/* Illustration */}

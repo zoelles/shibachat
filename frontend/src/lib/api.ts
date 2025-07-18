@@ -7,6 +7,11 @@ interface SignUpData {
     password: string; 
 }
 
+interface LoginData {
+    email: string, 
+    password: string; 
+}
+
 interface OnboardingData {
     fullName: string,
     bio: string, 
@@ -23,6 +28,11 @@ export const signup = async (signupData: SignUpData) => {
 
 export const completeOnboarding = async(onboardingData: OnboardingData) => {
     const response = await axiosInstance.post("/auth/onboarding", onboardingData);
+    return response.data;
+}
+
+export const login = async (loginData: LoginData) => {
+    const response = await axiosInstance.post("auth/login", loginData);
     return response.data;
 }
 
