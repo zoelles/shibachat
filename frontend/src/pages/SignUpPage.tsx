@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dog } from "lucide-react";
 import { Link } from "react-router"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signup } from "../lib/api";
+import { signup, getErrorMessage } from "../lib/api";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -18,7 +18,7 @@ const SignUpPage = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"]})
   });
 
-  const handleSignup = (e) => {
+  const handleSignup = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     signupMutation(signupData);
   }
@@ -38,7 +38,7 @@ const SignUpPage = () => {
           {/* Error Message */}
           {error && (
             <div className="alert alert-error mb-4">
-              <span>{error.response.data.message}</span>
+              <span> { getErrorMessage(error) }</span>
             </div>
           )}
 
@@ -145,7 +145,7 @@ const SignUpPage = () => {
           <div className="max-w-md p-8">
             {/* Illustration */}
             <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="/images/dog-image.png" alt="Language connection illustration" className="w-full h-full" />
+              <img src="images/dog-image.png" alt="Language connection illustration" className="w-full h-full" />
             </div>
 
             <div className="text-center space-y-3 mt-6">

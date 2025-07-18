@@ -26,8 +26,8 @@ export async function signup(req, res) {
             return res.status(400).json({ message: "Email already exists, please use a different one"})
         }
 
-        const idx = Math.floor(Math.random() * 100) + 1; //generate a number from 1-100
-        const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+        const idx = Math.floor(Math.random() * 49) + 1; //generate a number from 1-49
+        const randomAvatar = `images/user-icons/shiba_${idx}.png`;
 
         const newUser = await User.create({
             email,

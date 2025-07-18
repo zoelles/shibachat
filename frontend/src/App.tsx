@@ -9,38 +9,51 @@ import OnboardingPage from './pages/OnboardingPage.tsx';
 import SignUpPage from './pages/SignUpPage.tsx';
 
 import { Toaster } from "react-hot-toast";
-import { axiosInstance } from "./lib/axios.ts";
-import { useQuery } from "@tanstack/react-query";
+import PageLoader from "./components/PageLoader.tsx";
+import useAuthUser from "./hooks/useAuthUser.ts";
+import type { JSX } from "react/jsx-runtime";
 
 const App = () => {
-  const { data: authData, isLoading, error } = useQuery({
-    queryKey: ["authUser"], 
+  const {isLoading, authUser} = useAuthUser();
 
-    queryFn: async() => {
-      const res = await axiosInstance.get("/auth/me");
-      return res.data;
-    },
+  const isAuthenticated = Boolean(authUser);
+  var isOnboarded = authUser?.isOnboarded;
 
-    retry: false
-  });
-
-  const authUser = authData?.user;
+  if(isLoading) {
+    return <PageLoader />
+  }
 
   return (
     <div className="h-screen" data-theme="night">
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path="/call" element={authUser ? <CallPage /> : <Navigate to="/login" />} />
-        <Route path="/chat" element={authUser ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path="/notifications" element={authUser ? <NotificationsPage /> : <Navigate to="/login" />} />
-        <Route path="/onboarding" element={authUser ? <OnboardingPage /> : <Navigate to="/login" />} />
+        { /* Pre-Auth Pages */ }
+        <Route path="/signup" element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
+
+        { /* Onboarding Page */ }
+        <Route path="/onboarding" element={(isAuthenticated && !isOnboarded) ? <OnboardingPage /> : (
+          isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" /> ) } />
+
+        { /* Authorized Pages */ }
+        <Route path="/" element={ getNavPage(<HomePage />, isAuthenticated, isOnboarded) } />
+        <Route path="/call" element={ getNavPage(<CallPage />, isAuthenticated, isOnboarded) } />
+        <Route path="/chat" element={ getNavPage(<ChatPage />, isAuthenticated, isOnboarded)} />
+        <Route path="/notifications" element={ getNavPage(<NotificationsPage />, isAuthenticated, isOnboarded)} />
       </Routes>
 
       <Toaster />
     </div>
   )
 };
+
+const getNavPage = (intendedPage: JSX.Element, isAuthenticated : Boolean, isOnboarded : Boolean) => {
+  if(isAuthenticated && isOnboarded) {
+    return intendedPage;
+  } else if(isAuthenticated) {
+    return <Navigate to="/onboarding" />;
+  } else {
+    return <Navigate to="/login" />;
+  }
+}
 
 export default App
